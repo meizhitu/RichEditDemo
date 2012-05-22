@@ -1,0 +1,38 @@
+// DynamicOle.idl : IDL source for DynamicOle
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (DynamicOle.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	object,
+	uuid(0624AC93-AB85-420E-9667-D93AFF14997B),
+	dual,
+	nonextensible,
+	helpstring("IDynamicOleCom Interface"),
+	pointer_default(unique)
+]
+interface IDynamicOleCom : IDispatch{
+	[id(1), helpstring("·½·¨Insert")] HRESULT InsertGif(void);
+};
+[
+	uuid(6F349690-F724-40BB-8615-0954237055CD),
+	version(1.0),
+	helpstring("DynamicOle 1.0 Type Library")
+	
+]
+library DynamicOleLib
+{
+	importlib("stdole2.tlb");
+	[
+		uuid(5F03E670-D93D-483A-A514-C1BB01A43713),
+		helpstring("DynamicOleCom Class")
+	]
+	coclass DynamicOleCom
+	{
+		[default] interface IDynamicOleCom;
+	};
+};

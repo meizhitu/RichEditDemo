@@ -1,0 +1,26 @@
+HKCR
+{
+	DynamicOle.DynamicOleCom.1 = s 'DynamicOleCom Class'
+	{
+		CLSID = s '{5F03E670-D93D-483A-A514-C1BB01A43713}'
+	}
+	DynamicOle.DynamicOleCom = s 'DynamicOleCom Class'
+	{
+		CLSID = s '{5F03E670-D93D-483A-A514-C1BB01A43713}'
+		CurVer = s 'DynamicOle.DynamicOleCom.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {5F03E670-D93D-483A-A514-C1BB01A43713} = s 'DynamicOleCom Class'
+		{
+			ProgID = s 'DynamicOle.DynamicOleCom.1'
+			VersionIndependentProgID = s 'DynamicOle.DynamicOleCom'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{6F349690-F724-40BB-8615-0954237055CD}'
+		}
+	}
+}

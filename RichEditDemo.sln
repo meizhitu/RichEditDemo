@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RichEditDemo", "RichEditDemo\RichEditDemo.vcproj", "{976DAF50-E5D7-441C-8049-B8039499054C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "inc", "inc", "{C743F01F-F5B4-4850-B1EA-C9B2E4F53DB3}"
+	ProjectSection(SolutionItems) = preProject
+		RichEditDemo\wtl\Include\atlapp.h = RichEditDemo\wtl\Include\atlapp.h
+		RichEditDemo\wtl\Include\atlcrack.h = RichEditDemo\wtl\Include\atlcrack.h
+		RichEditDemo\wtl\Include\atlctrls.h = RichEditDemo\wtl\Include\atlctrls.h
+		RichEditDemo\wtl\Include\atlctrlw.h = RichEditDemo\wtl\Include\atlctrlw.h
+		RichEditDemo\wtl\Include\atlctrlx.h = RichEditDemo\wtl\Include\atlctrlx.h
+		RichEditDemo\wtl\Include\atlddx.h = RichEditDemo\wtl\Include\atlddx.h
+		RichEditDemo\wtl\Include\atldlgs.h = RichEditDemo\wtl\Include\atldlgs.h
+		RichEditDemo\wtl\Include\atldwm.h = RichEditDemo\wtl\Include\atldwm.h
+		RichEditDemo\wtl\Include\atlfind.h = RichEditDemo\wtl\Include\atlfind.h
+		RichEditDemo\wtl\Include\atlframe.h = RichEditDemo\wtl\Include\atlframe.h
+		RichEditDemo\wtl\Include\atlgdi.h = RichEditDemo\wtl\Include\atlgdi.h
+		RichEditDemo\wtl\Include\atlmisc.h = RichEditDemo\wtl\Include\atlmisc.h
+		RichEditDemo\wtl\Include\atlprint.h = RichEditDemo\wtl\Include\atlprint.h
+		RichEditDemo\wtl\Include\atlres.h = RichEditDemo\wtl\Include\atlres.h
+		RichEditDemo\wtl\Include\atlresce.h = RichEditDemo\wtl\Include\atlresce.h
+		RichEditDemo\wtl\Include\atlscrl.h = RichEditDemo\wtl\Include\atlscrl.h
+		RichEditDemo\wtl\Include\atlsplit.h = RichEditDemo\wtl\Include\atlsplit.h
+		RichEditDemo\wtl\Include\atltheme.h = RichEditDemo\wtl\Include\atltheme.h
+		RichEditDemo\wtl\Include\atluser.h = RichEditDemo\wtl\Include\atluser.h
+		RichEditDemo\wtl\Include\atlwince.h = RichEditDemo\wtl\Include\atlwince.h
+		RichEditDemo\wtl\Include\atlwinx.h = RichEditDemo\wtl\Include\atlwinx.h
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DynamicOle", "DynamicOle\DynamicOle.vcproj", "{E00C209F-7B7E-4D77-9765-25587B15E0FC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DynamicOlePS", "DynamicOle\DynamicOlePS.vcproj", "{8F2307BC-DA8B-4D30-9313-90A8B926E988}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E00C209F-7B7E-4D77-9765-25587B15E0FC} = {E00C209F-7B7E-4D77-9765-25587B15E0FC}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{976DAF50-E5D7-441C-8049-B8039499054C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{976DAF50-E5D7-441C-8049-B8039499054C}.Debug|Win32.Build.0 = Debug|Win32
+		{976DAF50-E5D7-441C-8049-B8039499054C}.Release|Win32.ActiveCfg = Release|Win32
+		{976DAF50-E5D7-441C-8049-B8039499054C}.Release|Win32.Build.0 = Release|Win32
+		{E00C209F-7B7E-4D77-9765-25587B15E0FC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E00C209F-7B7E-4D77-9765-25587B15E0FC}.Debug|Win32.Build.0 = Debug|Win32
+		{E00C209F-7B7E-4D77-9765-25587B15E0FC}.Release|Win32.ActiveCfg = Release|Win32
+		{E00C209F-7B7E-4D77-9765-25587B15E0FC}.Release|Win32.Build.0 = Release|Win32
+		{8F2307BC-DA8B-4D30-9313-90A8B926E988}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8F2307BC-DA8B-4D30-9313-90A8B926E988}.Release|Win32.ActiveCfg = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

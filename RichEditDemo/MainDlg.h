@@ -49,6 +49,7 @@ public:
 			WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_NUMBER | ES_LEFT,
 			0);
 		m_richEdit.InsertBitmap(CString(_T("F:\\VSWorkSpace\\RichEditDemo\\RichEditDemo\\a.bmp")));
+		m_richEdit.InsertGif();
 		// center the dialog on the screen
 		CenterWindow();
 

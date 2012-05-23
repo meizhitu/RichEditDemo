@@ -226,6 +226,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\DynamicOle\DynamicOle_i.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ExRichEdit.h"
 				>
 			</File>

@@ -17,7 +17,14 @@
 class ATL_NO_VTABLE CDynamicOleCom :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDynamicOleCom, &CLSID_DynamicOleCom>,
-	public IDispatchImpl<IDynamicOleCom, &IID_IDynamicOleCom, &LIBID_DynamicOleLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
+	public IDispatchImpl<IDynamicOleCom, &IID_IDynamicOleCom, &LIBID_DynamicOleLib, /*wMajor =*/ 1, /*wMinor =*/ 0>,
+	public IOleControlImpl<CDynamicOleCom>,
+	public IOleObjectImpl<CDynamicOleCom>,
+	public IOleInPlaceActiveObjectImpl<CDynamicOleCom>,
+	public IOleInPlaceObjectWindowlessImpl<CDynamicOleCom>,
+	public IViewObjectExImpl<CDynamicOleCom>,
+	public CComControl<CDynamicOleCom>
+	
 {
 public:
 	CDynamicOleCom()
@@ -30,6 +37,15 @@ DECLARE_REGISTRY_RESOURCEID(IDR_DYNAMICOLECOM)
 BEGIN_COM_MAP(CDynamicOleCom)
 	COM_INTERFACE_ENTRY(IDynamicOleCom)
 	COM_INTERFACE_ENTRY(IDispatch)
+	COM_INTERFACE_ENTRY(IViewObjectEx)  
+	COM_INTERFACE_ENTRY(IViewObject2)  
+	COM_INTERFACE_ENTRY(IViewObject)  
+	COM_INTERFACE_ENTRY(IOleInPlaceObjectWindowless)  
+	COM_INTERFACE_ENTRY(IOleInPlaceObject)  
+	COM_INTERFACE_ENTRY2(IOleWindow, IOleInPlaceObjectWindowless)  
+	COM_INTERFACE_ENTRY(IOleInPlaceActiveObject)  
+	COM_INTERFACE_ENTRY(IOleControl)  
+	COM_INTERFACE_ENTRY(IOleObject)
 END_COM_MAP()
 
 
@@ -46,6 +62,7 @@ END_COM_MAP()
 	}
 
 public:
+	HRESULT OnDraw(ATL_DRAWINFO& di);
 	STDMETHOD (InsertGif)(void);
 };
 

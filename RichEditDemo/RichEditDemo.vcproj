@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="RichEditDemo"
 	ProjectGUID="{976DAF50-E5D7-441C-8049-B8039499054C}"
+	RootNamespace="RichEditDemo"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -197,6 +198,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\RichEditOleCallback.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -230,6 +235,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ExOleClientSite.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ExOleInPlaceSite.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ExRichEdit.h"
 				>
 			</File>
@@ -239,6 +252,10 @@
 			</File>
 			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RichEditOleCallback.h"
 				>
 			</File>
 			<File

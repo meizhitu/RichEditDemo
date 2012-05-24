@@ -12,6 +12,21 @@ CExRichEdit::~CExRichEdit()
 
 }
 
+LRESULT CExRichEdit::OnLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	WORD selType = CRichEditCtrl::GetSelectionType();
+	if (selType != SEL_OBJECT)
+	{
+		bHandled = FALSE;
+	}
+	else
+	{
+		bHandled = FALSE;
+	}
+	
+	return 0L;
+}
+
 void CExRichEdit::InsertGif()
 {
 	CComQIPtr<IDynamicOleCom> spDyn;
@@ -25,6 +40,7 @@ void CExRichEdit::InsertGif()
 		hr = lpUnk->QueryInterface(IID_IOleObject, (LPVOID*)&lpOleObject);
 		if (lpOleObject == NULL)
 			throw(E_OUTOFMEMORY);
+		//hr = lpOleObject->SetClientSite( static_cast<IOleClientSite *>( this ) );
 		IViewObject2Ptr lpViewObject;// IViewObject for IOleObject above
 		hr = lpOleObject->QueryInterface(IID_IViewObject2, (LPVOID*)&lpViewObject);
 		if (hr != S_OK)
@@ -35,6 +51,7 @@ void CExRichEdit::InsertGif()
 		////获取RichEdit的OLEClientSite
 		IOleClientSitePtr lpClientSite;
 		hr = pRichEditOle->GetClientSite(&lpClientSite);
+
 		if (hr != S_OK)
 		{
 			AtlThrow(hr);
@@ -53,7 +70,7 @@ void CExRichEdit::InsertGif()
 		reobject.clsid = clsid;
 		reobject.cp = -1;
 		//reobject.cp = REO_CP_SELECTION;
-		reobject.dvaspect = DVASPECT_CONTENT;
+		reobject.dvaspect = DVASPECT_OPAQUE;//DVASPECT_OPAQUE;
 		reobject.poleobj = lpOleObject;
 		reobject.polesite = lpClientSite;
 		//reobject.pstg = lpStorage;
@@ -81,56 +98,54 @@ void CExRichEdit::InsertBitmap(CString& filePath)
 	LPSTORAGE lpStorage;
 	//分配内存
 	LPLOCKBYTES lpLockBytes = NULL;
-	SCODE sc = ::CreateILockBytesOnHGlobal(NULL,TRUE,&lpLockBytes);
-	if(sc != S_OK)
-		AtlThrow(sc);
+	SCODE hr = ::CreateILockBytesOnHGlobal(NULL,TRUE,&lpLockBytes);
+	if(hr != S_OK)
+		AtlThrow(hr);
 	ATLASSERT(lpLockBytes != NULL);
-	sc = ::StgCreateDocfileOnILockBytes(lpLockBytes,STGM_SHARE_EXCLUSIVE|STGM_CREATE|STGM_READWRITE,0,&lpStorage);
-	if(sc != S_OK)
+	hr = ::StgCreateDocfileOnILockBytes(lpLockBytes,STGM_SHARE_EXCLUSIVE|STGM_CREATE|STGM_READWRITE,0,&lpStorage);
+	if(hr != S_OK)
 	{
 		ATLVERIFY(lpLockBytes->Release() == 0);
 		lpLockBytes = NULL;
-		AtlThrow(sc);
+		AtlThrow(hr);
 	}
 	ATLASSERT(lpStorage != NULL);
 	LPOLEOBJECT lpOleObject;
-	sc = ::OleCreateFromFile(CLSID_NULL, filePath,
+	hr = ::OleCreateFromFile(CLSID_NULL, filePath,
 		IID_IUnknown, OLERENDER_DRAW, NULL, NULL, 
 		lpStorage, (void **)&lpOleObject);
-	if (sc != S_OK)
+	if (hr != S_OK)
 	{
-		AtlThrow(sc);
+		AtlThrow(hr);
 	}
 	ATLASSERT(lpOleObject != NULL);
-	LPUNKNOWN lpUnk = lpOleObject;
-	lpUnk->QueryInterface(IID_IOleObject, (LPVOID*)&lpOleObject);
-	lpUnk->Release();
+	IUnknownPtr lpUnk = lpOleObject;
+	hr = lpUnk->QueryInterface(IID_IOleObject, (LPVOID*)&lpOleObject);
 	if (lpOleObject == NULL)
 		throw(E_OUTOFMEMORY);
-	LPVIEWOBJECT2 lpViewObject;// IViewObject for IOleObject above
-	sc = lpOleObject->QueryInterface(IID_IViewObject2, (LPVOID*)&lpViewObject);
-	if (sc != S_OK)
+	IViewObject2Ptr lpViewObject;// IViewObject for IOleObject above
+	hr = lpOleObject->QueryInterface(IID_IViewObject2, (LPVOID*)&lpViewObject);
+	if (hr != S_OK)
 	{
-		AtlThrow(sc);
+		AtlThrow(hr);
 	}
-	OleSetContainedObject(lpOleObject, TRUE);
 	IRichEditOle* pRichEditOle = GetOleInterface();
 	////获取RichEdit的OLEClientSite
-	LPOLECLIENTSITE lpClientSite;
-	sc = pRichEditOle->GetClientSite(&lpClientSite);
-	if (sc != S_OK)
+	IOleClientSitePtr lpClientSite;
+	hr = pRichEditOle->GetClientSite(&lpClientSite);
+	if (hr != S_OK)
 	{
-		AtlThrow(sc);
+		AtlThrow(hr);
 	}
 	REOBJECT reobject;
 	ZeroMemory(&reobject,sizeof(REOBJECT));
 	reobject.cbStruct = sizeof(REOBJECT);
 
 	CLSID clsid;
-	sc = lpOleObject->GetUserClassID(&clsid);
-	if (sc != S_OK)
+	hr = lpOleObject->GetUserClassID(&clsid);
+	if (hr != S_OK)
 	{
-		AtlThrow(sc);
+		AtlThrow(hr);
 	}
 
 	reobject.clsid = clsid;
@@ -142,14 +157,17 @@ void CExRichEdit::InsertBitmap(CString& filePath)
 	//reobject.pstg = lpStorage;
 	SIZEL sizel;
 	sizel.cx = sizel.cy = 0; // let richedit determine initial size
-	//reobject.sizel = sizel;
+
+	SIZEL sizeInPix = {20, 20};
+	SIZEL sizeInHiMetric;
+	AtlPixelToHiMetric(&sizeInPix, &sizeInHiMetric);
+
+	//reobject.sizel = sizeInHiMetric;
 	reobject.dwFlags = REO_BELOWBASELINE;//REO_RESIZABLE
 	reobject.dwUser = 0;//TODO 用户数据
 
-	sc = pRichEditOle->InsertObject(&reobject);
-
-	lpViewObject->Release();
-	lpLockBytes->Release();
+	lpOleObject->SetClientSite(lpClientSite); 
+	hr = pRichEditOle->InsertObject(&reobject);
+	OleSetContainedObject(lpOleObject, TRUE);
 	lpOleObject->Release();
-	lpStorage->Release();
 }

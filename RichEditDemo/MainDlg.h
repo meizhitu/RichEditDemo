@@ -5,6 +5,7 @@
 #pragma once
 #include "ExRichEdit.h"
 #include <atltypes.h>
+#include "RichEditOleCallback.h"
 
 class CMainDlg : public CDialogImpl<CMainDlg>, public CUpdateUI<CMainDlg>,
 	public CMessageFilter, public CIdleHandler
@@ -48,6 +49,9 @@ public:
 			L"",
 			WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_NUMBER | ES_LEFT,
 			0);
+		CRichEditOleCallback *pRichEditOle = new CRichEditOleCallback;
+		m_richEdit.SetOleCallback(pRichEditOle);
+
 		m_richEdit.InsertBitmap(CString(_T("F:\\VSWorkSpace\\RichEditDemo\\RichEditDemo\\a.bmp")));
 		m_richEdit.InsertGif();
 		// center the dialog on the screen

@@ -61,6 +61,28 @@ END_COM_MAP()
 	{
 	}
 
+	STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid,
+		LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
+		EXCEPINFO* pexcepinfo, UINT* puArgErr)
+	{
+		switch (dispidMember)
+		{
+		case DISPID_AMBIENT_SHOWHATCHING:
+			{
+				V_VT(pvarResult) = VT_BOOL;
+				V_BOOL(pvarResult) = 0;
+				return S_OK;
+			}
+			break;
+		}
+		return _tih.Invoke((IDispatch*)this, dispidMember, riid, lcid,
+			wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr);
+	}
+
+	STDMETHOD(CanInPlaceActivate)(void)	{
+		return S_FALSE;
+	}
+	
 public:
 	HRESULT OnDraw(ATL_DRAWINFO& di);
 	STDMETHOD (InsertGif)(void);

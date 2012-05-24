@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0500 */
-/* at Tue May 22 17:44:27 2012
+/* at Thu May 24 18:11:19 2012
  */
 /* Compiler settings for .\DynamicOle.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
@@ -87,7 +87,8 @@ EXTERN_C const IID IID_IDynamicOleCom;
     IDynamicOleCom : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InsertGif( void) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InsertGif( 
+            /* [in] */ LONG img) = 0;
         
     };
     
@@ -139,7 +140,8 @@ EXTERN_C const IID IID_IDynamicOleCom;
             /* [out] */ UINT *puArgErr);
         
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InsertGif )( 
-            IDynamicOleCom * This);
+            IDynamicOleCom * This,
+            /* [in] */ LONG img);
         
         END_INTERFACE
     } IDynamicOleComVtbl;
@@ -177,8 +179,8 @@ EXTERN_C const IID IID_IDynamicOleCom;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IDynamicOleCom_InsertGif(This)	\
-    ( (This)->lpVtbl -> InsertGif(This) ) 
+#define IDynamicOleCom_InsertGif(This,img)	\
+    ( (This)->lpVtbl -> InsertGif(This,img) ) 
 
 #endif /* COBJMACROS */
 

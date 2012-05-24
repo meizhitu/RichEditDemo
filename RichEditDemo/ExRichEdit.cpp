@@ -89,6 +89,7 @@ void CExRichEdit::InsertGif()
 		hr = pRichEditOle->InsertObject(&reobject);
 		OleSetContainedObject(lpOleObject, TRUE);
 		lpOleObject->Release();
+		spDyn->InsertGif(0);
 	}
 }
 

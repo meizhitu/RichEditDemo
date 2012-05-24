@@ -6,7 +6,7 @@
 
 // CDynamicOleCom
 
-STDMETHODIMP CDynamicOleCom::InsertGif(void)
+STDMETHODIMP CDynamicOleCom::InsertGif(LONG img)
 {
 	return S_OK;
 }

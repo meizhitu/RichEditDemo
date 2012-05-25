@@ -45,15 +45,17 @@ public:
 	{
 		HWND richEditWnd = m_richEdit.Create(
 			m_hWnd,
-			CRect(0,0,100,100),
+			CRect(0,0,300,300),
 			L"",
-			WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_NUMBER | ES_LEFT,
+			WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_MULTILINE | ES_LEFT |WS_VSCROLL,
 			0);
 		CRichEditOleCallback *pRichEditOle = new CRichEditOleCallback;
 		m_richEdit.SetOleCallback(pRichEditOle);
 
 		m_richEdit.InsertBitmap(CString(_T("F:\\VSWorkSpace\\RichEditDemo\\RichEditDemo\\a.bmp")));
-		m_richEdit.InsertGif();
+		Image* gif = Image::FromFile(_T("F:\\VSWorkSpace\\RichEditDemo\\RichEditDemo\\b.gif"));
+		m_richEdit.InsertGif((LONG)gif);
+		m_richEdit.StartTimer();
 		// center the dialog on the screen
 		CenterWindow();
 

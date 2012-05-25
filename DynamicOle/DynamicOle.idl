@@ -16,7 +16,8 @@ import "ocidl.idl";
 	pointer_default(unique)
 ]
 interface IDynamicOleCom : IDispatch{
-	[id(1), helpstring("方法Insert")] HRESULT InsertGif([in] LONG img);
+	[id(1), helpstring("方法SetHostWindow")] HRESULT SetHostWindow([in] LONG hWnd);
+	[id(2), helpstring("方法Insert")] HRESULT InsertGif([in] LONG img);
 };
 [
 	uuid(6F349690-F724-40BB-8615-0954237055CD),

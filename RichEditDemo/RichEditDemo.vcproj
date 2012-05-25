@@ -247,6 +247,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ExRichEditData.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MainDlg.h"
 				>
 			</File>

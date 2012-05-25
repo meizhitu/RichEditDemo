@@ -49,13 +49,17 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 	HMODULE hInstRichEdit = ::LoadLibrary(_T("Msftedit.dll"));
 
 	AtlInitCommonControls(ICC_BAR_CLASSES);	// add flags to support other controls
-
+	GdiplusStartupInput		m_gdiplusStartupInput;
+	ULONG_PTR				m_gdiplusToken;
+	Status sta = GdiplusStartup(&m_gdiplusToken, &m_gdiplusStartupInput, NULL);		//GDI+≥ı ºªØ
 	
 
 	hRes = _Module.Init(NULL, hInstance);
 	ATLASSERT(SUCCEEDED(hRes));
 
 	int nRet = Run(lpstrCmdLine, nCmdShow);
+
+	GdiplusShutdown(m_gdiplusToken);
 
 	if( hInstRichEdit != NULL )
 	{

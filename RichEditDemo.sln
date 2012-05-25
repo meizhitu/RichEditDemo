@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RichEditDemo", "RichEditDemo\RichEditDemo.vcproj", "{976DAF50-E5D7-441C-8049-B8039499054C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E00C209F-7B7E-4D77-9765-25587B15E0FC} = {E00C209F-7B7E-4D77-9765-25587B15E0FC}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "inc", "inc", "{C743F01F-F5B4-4850-B1EA-C9B2E4F53DB3}"
 	ProjectSection(SolutionItems) = preProject

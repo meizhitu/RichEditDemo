@@ -14,7 +14,8 @@ class CExRichEdit :
 {
 public:
 	void InsertBitmap(CString& filePath) ;
-	void InsertGif();
+	void InsertGif(LONG gif);
+	void StartTimer();
 public:
 	CExRichEdit();
 	~CExRichEdit();
@@ -23,10 +24,12 @@ public:
 
 	BEGIN_MSG_MAP(CExRichEdit)
 		MESSAGE_HANDLER(WM_LBUTTONDBLCLK, OnLButtonDblClk)
+		MESSAGE_HANDLER(WM_TIMER, OnTimer)
 		CHAIN_MSG_MAP_ALT(CRichEditCommands<CExRichEdit>, 1)
 		DEFAULT_REFLECTION_HANDLER()
 	END_MSG_MAP()
 protected:
 	LRESULT OnLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnTimer( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 
 };

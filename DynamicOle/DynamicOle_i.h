@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0500 */
-/* at Thu May 24 18:11:19 2012
+/* at Fri May 25 17:37:13 2012
  */
 /* Compiler settings for .\DynamicOle.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
@@ -87,6 +87,9 @@ EXTERN_C const IID IID_IDynamicOleCom;
     IDynamicOleCom : public IDispatch
     {
     public:
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetHostWindow( 
+            /* [in] */ LONG hWnd) = 0;
+        
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InsertGif( 
             /* [in] */ LONG img) = 0;
         
@@ -139,6 +142,10 @@ EXTERN_C const IID IID_IDynamicOleCom;
             /* [out] */ EXCEPINFO *pExcepInfo,
             /* [out] */ UINT *puArgErr);
         
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetHostWindow )( 
+            IDynamicOleCom * This,
+            /* [in] */ LONG hWnd);
+        
         /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InsertGif )( 
             IDynamicOleCom * This,
             /* [in] */ LONG img);
@@ -178,6 +185,9 @@ EXTERN_C const IID IID_IDynamicOleCom;
 #define IDynamicOleCom_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
+
+#define IDynamicOleCom_SetHostWindow(This,hWnd)	\
+    ( (This)->lpVtbl -> SetHostWindow(This,hWnd) ) 
 
 #define IDynamicOleCom_InsertGif(This,img)	\
     ( (This)->lpVtbl -> InsertGif(This,img) ) 

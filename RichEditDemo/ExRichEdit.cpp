@@ -4,6 +4,12 @@
 #include <comdefsp.h>
 #include "ExRichEditData.h"
 
+const IID IID_ITextServices = {
+	// 由于此 IID 在 SDK 中的 riched20.lib 是错误的 , 需重新定义
+	0x8d33f740, 0xcf58, 0x11ce, {0xa8, 0x9d, 0x00, 0xaa, 0x00, 0x6c, 0xad, 0xc5}
+
+};
+
 #define ID_EVENT_UPDATE_OLE 1                       //更新OLE对象的TIMER的ID
 #define ELAPSE_TIME_UPDATE_OLE 100                  //更新OLE对象的时间间隔100ms
 
@@ -31,6 +37,40 @@ LRESULT CExRichEdit::OnTimer( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 			::RedrawWindow(m_hWnd,NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 		return TRUE;
 	}
+}
+
+LRESULT CExRichEdit::OnEraseBkgnd( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
+{
+	bHandled = TRUE;
+	return 1L;
+}
+
+LRESULT CExRichEdit::OnPaint( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
+{
+	CRect clientRect(0, 0, 0, 0);
+	GetClientRect(&clientRect);
+	m_memDC.Create(clientRect.Width(), clientRect.Height());
+	if (m_memDC.IsReady())
+	{
+		PAINTSTRUCT ps;
+		HDC hClientDC = BeginPaint(&ps);
+		HBRUSH hbrush = ::CreateSolidBrush(RGB(255, 255, 255));
+		HBRUSH holdBrush = HBRUSH(::SelectObject(m_memDC.GetSafeHdc(), hbrush));
+		::Rectangle(m_memDC.GetSafeHdc(), -1, -1, clientRect.Width() + 1, clientRect.Height() + 1);
+		::SelectObject(m_memDC.GetSafeHdc(), holdBrush);
+		::DeleteObject(hbrush);
+		
+		HRESULT hr = CRichEditCtrl::GetOleInterface()->QueryInterface(IID_ITextServices, (void**)&m_textServices);
+		m_textServices->TxDraw(DVASPECT_CONTENT, NULL, NULL, NULL, m_memDC.GetSafeHdc(), NULL, LPCRECTL(&clientRect), NULL, NULL, NULL, NULL, NULL);
+
+		::BitBlt(hClientDC, 0, 0, clientRect.Width(), clientRect.Height(), m_memDC.GetSafeHdc(), 0, 0, SRCCOPY);
+
+		EndPaint(&ps);
+		bHandled = TRUE;
+		return 0L;
+	}
+	bHandled = FALSE;
+	return 1L;
 }
 
 LRESULT CExRichEdit::OnLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)

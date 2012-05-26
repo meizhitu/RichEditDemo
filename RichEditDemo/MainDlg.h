@@ -52,9 +52,23 @@ public:
 		CRichEditOleCallback *pRichEditOle = new CRichEditOleCallback;
 		m_richEdit.SetOleCallback(pRichEditOle);
 
-		m_richEdit.InsertBitmap(CString(_T("F:\\VSWorkSpace\\RichEditDemo\\RichEditDemo\\a.bmp")));
-		Image* gif = Image::FromFile(_T("F:\\VSWorkSpace\\RichEditDemo\\RichEditDemo\\b.gif"));
+		TCHAR exeFullPath[MAX_PATH]; // MAX_PATH
+		GetModuleFileName(NULL,exeFullPath,MAX_PATH);//得到程序模块名称，全路径
+		CString fileAPath;
+		fileAPath.Format(_T("%s\\..\\%s"),exeFullPath,_T("a.bmp"));
+		CString fileGPath;
+		fileGPath.Format(_T("%s\\..\\%s"),exeFullPath,_T("c.gif"));
+
+		m_richEdit.InsertBitmap(fileAPath);
+		Image* gif = Image::FromFile(fileGPath);
 		m_richEdit.InsertGif((LONG)gif);
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
 		m_richEdit.StartTimer();
 		// center the dialog on the screen
 		CenterWindow();

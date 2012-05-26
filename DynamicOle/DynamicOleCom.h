@@ -4,6 +4,8 @@
 #include "resource.h"       // main symbols
 
 #include "DynamicOle_i.h"
+#include <vector>
+using namespace std;
 #include <gdiplus.h>
 using namespace Gdiplus;
 
@@ -53,6 +55,12 @@ public:
 };
 
 
+struct TGifFrame
+{
+	int m_FrameIndex;
+	int m_lpause;
+	int m_FrameCount;
+};
 // CDynamicOleCom
 
 class ATL_NO_VTABLE CDynamicOleCom :
@@ -163,6 +171,8 @@ private:
 	Image *m_gifImg;
 	int m_currentFrame;
 	static VOID CALLBACK OnGifTimer( HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime );
+	vector<TGifFrame> m_vGif;
+	void LoadGif(Image* gif);
 	
 };
 

@@ -10,8 +10,44 @@ STDMETHODIMP CDynamicOleCom::InsertGif(LONG img)
 {
 	m_gifImg = (Image*)img;
 	m_objectType = 2;
-	::SetTimer( m_mockWindow.m_hWnd, (UINT_PTR)this , 100 , OnGifTimer );
+	LoadGif(m_gifImg);
 	return S_OK;
+}
+
+void CDynamicOleCom::LoadGif(Image* img)
+{
+	int nFrameDimensionsCount = img->GetFrameDimensionsCount();
+	if( nFrameDimensionsCount > 0 )
+	{
+		GUID *pDimensionIDs = new GUID[ nFrameDimensionsCount ];
+		img->GetFrameDimensionsList( pDimensionIDs , nFrameDimensionsCount );
+		int nFrameCount = img->GetFrameCount( &pDimensionIDs[0] );
+		delete []pDimensionIDs;
+		if( nFrameCount > 1 )
+		{
+			int nPropSize = img->GetPropertyItemSize( PropertyTagFrameDelay );
+			if( nPropSize > 0 )
+			{
+				Gdiplus::PropertyItem *propItem = (Gdiplus::PropertyItem *)malloc( nPropSize ) ;
+				if( propItem != NULL )
+				{
+					img->GetPropertyItem( PropertyTagFrameDelay , nPropSize , propItem );
+					for (int i = 0; i < nPropSize; i++)
+					{
+						long lPause = ((long*) propItem->value)[i] * 10;
+						if( lPause < 100 ) lPause = 100;
+						TGifFrame gf;
+						gf.m_FrameIndex = i;
+						gf.m_lpause = lPause;
+						gf.m_FrameCount = nFrameCount;
+						m_vGif.push_back(gf);
+					}
+					::SetTimer( m_mockWindow.m_hWnd, (UINT_PTR)this , m_vGif[0].m_lpause , OnGifTimer );
+					free( propItem );
+				}			
+			}			
+		}
+	}
 }
 
 STDMETHODIMP CDynamicOleCom::SetHostWindow(LONG hWnd)
@@ -54,46 +90,19 @@ VOID CDynamicOleCom::OnGifTimer( HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD d
 {
 	::KillTimer( hwnd, idEvent );
 	CDynamicOleCom* dynOleCom = ( CDynamicOleCom* )idEvent;
-
-	GUID pageGUID = Gdiplus::FrameDimensionTime;
-	
-	Image* img = dynOleCom->m_gifImg;
-	img->SelectActiveFrame( &pageGUID , dynOleCom->m_currentFrame );
-	dynOleCom->m_currentFrame = (dynOleCom->m_currentFrame+1)%48;
-	::SetTimer( hwnd, idEvent , 100 , OnGifTimer );
-	//dynOleCom->RedrawHostWindow();
-	//GIF解析
-	/*int nFrameDimensionsCount = img->GetFrameDimensionsCount();
-	if( nFrameDimensionsCount > 0 )
+	if (dynOleCom->m_vGif.size() > 1)
 	{
-		GUID *pDimensionIDs = new GUID[ nFrameDimensionsCount ];
-		img->GetFrameDimensionsList( pDimensionIDs , nFrameDimensionsCount );
-		int nFrameCount = img->GetFrameCount( &pDimensionIDs[0] );
-		delete []pDimensionIDs;
-		if( nFrameCount > 1 )
-		{
-			int nPropSize = img->GetPropertyItemSize( PropertyTagFrameDelay );
-			if( nPropSize > 0 )
-			{
-				Gdiplus::PropertyItem *propItem = (Gdiplus::PropertyItem *)malloc( nPropSize ) ;
-				if( propItem != NULL )
-				{
-					img->GetPropertyItem( PropertyTagFrameDelay , nPropSize , propItem );
-					long lPause = ((long*) propItem->value)[dynOleCom->m_currentFrame] * 10;
-					if( lPause < 100 ) lPause = 100;
-					dynOleCom->m_currentFrame = (dynOleCom->m_currentFrame+1)%nFrameCount;
-					::SetTimer( hwnd, idEvent , lPause , OnGifTimer );
-					free( propItem );
-				}			
-			}			
-		}
-	}*/
-
+		GUID pageGUID = Gdiplus::FrameDimensionTime;
+		Image* img = dynOleCom->m_gifImg;
+		img->SelectActiveFrame( &pageGUID , dynOleCom->m_currentFrame );
+		dynOleCom->m_currentFrame = (dynOleCom->m_currentFrame+1)%dynOleCom->m_vGif[0].m_FrameCount;
+		::SetTimer( hwnd, idEvent , dynOleCom->m_vGif[dynOleCom->m_currentFrame].m_lpause , OnGifTimer );
+	}
 }
 
 
 LRESULT CWinHiddenMock::OnRefreshOle(UINT uMsg, WPARAM wParam, 
-									 LPARAM lParam, BOOL& bHandled)
+	LPARAM lParam, BOOL& bHandled)
 {
 	if (m_dynamicOleCom != NULL)
 		m_dynamicOleCom->FireViewChange();//调用控件对象的函数，在这个函数中实现我们要的功能

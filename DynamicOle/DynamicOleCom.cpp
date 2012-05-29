@@ -96,6 +96,7 @@ VOID CDynamicOleCom::OnGifTimer( HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD d
 		Image* img = dynOleCom->m_gifImg;
 		img->SelectActiveFrame( &pageGUID , dynOleCom->m_currentFrame );
 		dynOleCom->m_currentFrame = (dynOleCom->m_currentFrame+1)%dynOleCom->m_vGif[0].m_FrameCount;
+		dynOleCom->FireViewChange();
 		::SetTimer( hwnd, idEvent , dynOleCom->m_vGif[dynOleCom->m_currentFrame].m_lpause , OnGifTimer );
 	}
 }

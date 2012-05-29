@@ -100,11 +100,24 @@ public:
 		// Rectangle for the control
 		cs.x = 0;
 		cs.y = 0;
-		cs.cy = 50;
+		cs.cy = 300;
 		cs.cx = 300;
 
 		m_richEditLess.Init(m_hWnd,&cs,NULL);
+		CRichEditOleCallback *pRichEditOle = new CRichEditOleCallback;
+		m_richEditLess.SetOLECallback(pRichEditOle);
+		TCHAR exeFullPath[MAX_PATH]; // MAX_PATH
+		GetModuleFileName(NULL,exeFullPath,MAX_PATH);//得到程序模块名称，全路径
+		CString fileAPath;
+		fileAPath.Format(_T("%s\\..\\%s"),exeFullPath,_T("a.bmp"));
+		CString fileGPath;
+		fileGPath.Format(_T("%s\\..\\%s"),exeFullPath,_T("c.gif"));
+
+		Image* gif = Image::FromFile(fileGPath);
+		m_richEditLess.InsertGif((LONG)gif);
+
 		m_richEditLess.OnTxInPlaceActivate(NULL);
+		m_richEditLess.AppendText(_T("windowless edit"),true);
 
 		//CreateControlWindow(m_hWnd,NULL);
 		// center the dialog on the screen

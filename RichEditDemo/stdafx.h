@@ -39,6 +39,8 @@ using namespace Gdiplus;
 #pragma comment(lib,"riched20.lib")
 #pragma comment(lib,"imm32.lib")
 
+const LPTSTR STR_PROGID = _T("DynamicOle.DynamicOleCom.1");
+
 #include <comdef.h>
 #include <windows.h>
 #if defined _M_IX86

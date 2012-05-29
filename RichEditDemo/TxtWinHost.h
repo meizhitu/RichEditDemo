@@ -343,7 +343,7 @@ private:
 //	Data Members
 //
 
-private:
+protected:
 
    static LONG xWidthSys;
    static LONG yHeightSys;

@@ -1,6 +1,4 @@
 #pragma once
-#include "ExOleInPlaceSite.h"
-#include "ExOleClientSite.h"
 #include <TextServ.h>
 #include "BitmapDC.h"
 
@@ -10,9 +8,7 @@ typedef CWinTraits<WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | W
 const LPTSTR STR_PROGID = _T("DynamicOle.DynamicOleCom.1");
 class CExRichEdit :
 	public CWindowImpl<CExRichEdit, CRichEditCtrl, CExRichEditWinTraits>,
-	public CRichEditCommands<CExRichEdit>,
-	public IExOleInPlaceSiteImpl,
-	public IExOleClientSiteImpl
+	public CRichEditCommands<CExRichEdit>
 {
 public:
 	void InsertBitmap(CString& filePath) ;

@@ -36,6 +36,8 @@ extern CAppModule _Module;
 #include <gdiplus.h>
 using namespace Gdiplus;
 #pragma comment(lib, "gdiplus.lib")
+#pragma comment(lib,"riched20.lib")
+#pragma comment(lib,"imm32.lib")
 
 #include <comdef.h>
 #include <windows.h>

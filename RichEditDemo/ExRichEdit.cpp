@@ -37,6 +37,7 @@ LRESULT CExRichEdit::OnTimer( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 			::RedrawWindow(m_hWnd,NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 		return TRUE;
 	}
+	return FALSE;
 }
 
 LRESULT CExRichEdit::OnEraseBkgnd( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )

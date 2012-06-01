@@ -1,11 +1,16 @@
 #include "stdafx.h"
 #include "RichEditOleCallback.h"
+#include "dragdrop.h"
+
+#define   STR_OLE_CLIPBOARD_FORMAT   _T("STR_OLE_CLIPBOARD_FORMAT")  
+
 
 CRichEditOleCallback::CRichEditOleCallback()
 {
 	pStorage = NULL;
 	m_iNumStorages = 0;
 	m_dwRef = 0;
+	m_uOwnOleClipboardFormat = RegisterClipboardFormat(STR_OLE_CLIPBOARD_FORMAT);
 
 	// set up OLE storage
 
@@ -84,8 +89,7 @@ STDMETHODIMP_(ULONG) CRichEditOleCallback::Release()
 }
 
 
-STDMETHODIMP CRichEditOleCallback::GetInPlaceContext(LPOLEINPLACEFRAME FAR *lplpFrame,
-										LPOLEINPLACEUIWINDOW FAR *lplpDoc, LPOLEINPLACEFRAMEINFO lpFrameInfo)
+STDMETHODIMP CRichEditOleCallback::GetInPlaceContext(LPOLEINPLACEFRAME FAR *lplpFrame,LPOLEINPLACEUIWINDOW FAR *lplpDoc, LPOLEINPLACEFRAMEINFO lpFrameInfo)
 {
 	return S_OK;
 }
@@ -100,6 +104,10 @@ STDMETHODIMP CRichEditOleCallback::ShowContainerUI(BOOL fShow)
 
 STDMETHODIMP CRichEditOleCallback::QueryInsertObject(LPCLSID lpclsid, LPSTORAGE lpstg, LONG cp)
 {
+	if (CLSID_DynamicOleCom == *lpclsid)
+	{
+		return S_OK;
+	}
 	return S_OK;
 }
 
@@ -111,10 +119,9 @@ STDMETHODIMP CRichEditOleCallback::DeleteObject(LPOLEOBJECT lpoleobj)
 
 
 
-STDMETHODIMP CRichEditOleCallback::QueryAcceptData(LPDATAOBJECT lpdataobj, CLIPFORMAT FAR *lpcfFormat,
-									  DWORD reco, BOOL fReally, HGLOBAL hMetaPict)
+STDMETHODIMP CRichEditOleCallback::QueryAcceptData(LPDATAOBJECT lpdataobj, CLIPFORMAT FAR *lpcfFormat,DWORD reco, BOOL fReally, HGLOBAL hMetaPict)
 {
-	return S_OK;
+	return S_OK;  
 }
 
 
@@ -137,7 +144,7 @@ STDMETHODIMP CRichEditOleCallback::GetDragDropEffect(BOOL fDrag, DWORD grfKeySta
 }
 
 STDMETHODIMP CRichEditOleCallback::GetContextMenu(WORD seltyp, LPOLEOBJECT lpoleobj, CHARRANGE FAR *lpchrg,
-									 HMENU FAR *lphmenu)
+												  HMENU FAR *lphmenu)
 {
 	return S_OK;
 }

@@ -1,5 +1,9 @@
 #pragma once
 
+#define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
+	const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}
+MIDL_DEFINE_GUID(CLSID, CLSID_DynamicOleCom,0x5F03E670,0xD93D,0x483A,0xA5,0x14,0xC1,0xBB,0x01,0xA4,0x37,0x13);
+
 class CRichEditOleCallback: public IRichEditOleCallback
 {
 public:
@@ -8,6 +12,7 @@ public:
 	int m_iNumStorages;
 	IStorage* pStorage;
 	DWORD m_dwRef;
+	UINT m_uOwnOleClipboardFormat;
 
 #pragma region  IUnknown methods 
 	STDMETHOD(QueryInterface) (REFIID riid, LPVOID FAR * lplpObj);

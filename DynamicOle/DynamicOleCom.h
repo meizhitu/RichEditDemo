@@ -133,6 +133,11 @@ END_COM_MAP()
 	{
 	}
 
+	STDMETHOD(DoVerb)(LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSite, LONG lindex, HWND hwndParent, LPCRECT lprcPosRect)
+	{
+		return S_OK;
+	}
+
 	STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid,
 		LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
 		EXCEPINFO* pexcepinfo, UINT* puArgErr)

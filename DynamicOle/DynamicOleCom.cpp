@@ -96,6 +96,7 @@ VOID CDynamicOleCom::OnGifTimer( HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD d
 		Image* img = dynOleCom->m_gifImg;
 		img->SelectActiveFrame( &pageGUID , dynOleCom->m_currentFrame );
 		dynOleCom->m_currentFrame = (dynOleCom->m_currentFrame+1)%dynOleCom->m_vGif[0].m_FrameCount;
+		//这个地方也可以不调用FireViewChange，而调用RedrawHostWindow，或者在RichEdit里面建个timer来刷新，RichEdit管理刷新会比较稳定，内存和CPU占用也不大，而且不会有滚动条问题
 		dynOleCom->FireViewChange();
 		::SetTimer( hwnd, idEvent , dynOleCom->m_vGif[dynOleCom->m_currentFrame].m_lpause , OnGifTimer );
 	}

@@ -61,33 +61,34 @@ public:
 
 	LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 	{
-		//HWND richEditWnd = m_richEdit.Create(
-		//	m_hWnd,
-		//	CRect(0,0,300,300),
-		//	L"",
-		//	WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_MULTILINE | ES_LEFT |WS_VSCROLL,
-		//	0);
-		//CRichEditOleCallback *pRichEditOle = new CRichEditOleCallback;
-		//m_richEdit.SetOleCallback(pRichEditOle);
+		HWND richEditWnd = m_richEdit.Create(
+			m_hWnd,
+			CRect(0,0,300,150),
+			L"",
+			WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_MULTILINE | ES_LEFT |WS_VSCROLL,
+			0);
+		CRichEditOleCallback *pRichEditOle = new CRichEditOleCallback;
+		m_richEdit.SetOleCallback(pRichEditOle);
 
-		//TCHAR exeFullPath[MAX_PATH]; // MAX_PATH
-		//GetModuleFileName(NULL,exeFullPath,MAX_PATH);//得到程序模块名称，全路径
-		//CString fileAPath;
-		//fileAPath.Format(_T("%s\\..\\%s"),exeFullPath,_T("a.bmp"));
-		//CString fileGPath;
-		//fileGPath.Format(_T("%s\\..\\%s"),exeFullPath,_T("c.gif"));
+		TCHAR exeFullPath[MAX_PATH]; // MAX_PATH
+		GetModuleFileName(NULL,exeFullPath,MAX_PATH);//得到程序模块名称，全路径
+		CString fileAPath;
+		fileAPath.Format(_T("%s\\..\\%s"),exeFullPath,_T("a.bmp"));
+		CString fileGPath;
+		fileGPath.Format(_T("%s\\..\\%s"),exeFullPath,_T("c.gif"));
 
-		//m_richEdit.InsertBitmap(fileAPath);
-		//Image* gif = Image::FromFile(fileGPath);
-		//m_richEdit.InsertGif((LONG)gif);
-		//m_richEdit.InsertGif((LONG)gif->Clone());
-		//m_richEdit.InsertGif((LONG)gif->Clone());
-		//m_richEdit.InsertGif((LONG)gif->Clone());
-		//m_richEdit.InsertGif((LONG)gif->Clone());
-		//m_richEdit.InsertGif((LONG)gif->Clone());
-		//m_richEdit.InsertGif((LONG)gif->Clone());
-		//m_richEdit.InsertGif((LONG)gif->Clone());
-		//m_richEdit.StartTimer();
+		m_richEdit.InsertBitmap(fileAPath);
+		Image* gif = Image::FromFile(fileGPath);
+		m_richEdit.InsertGif((LONG)gif);
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.InsertGif((LONG)gif->Clone());
+		m_richEdit.StartTimer();
+
 
 		CREATESTRUCT cs;
 		// No text for text control yet
@@ -99,22 +100,16 @@ public:
 		cs.dwExStyle = 0;
 		// Rectangle for the control
 		cs.x = 0;
-		cs.y = 0;
+		cs.y = 150;
 		cs.cy = 300;
 		cs.cx = 300;
 
 		m_richEditLess.Init(m_hWnd,&cs,NULL);
-		CRichEditOleCallback *pRichEditOle = new CRichEditOleCallback;
-		m_richEditLess.SetOLECallback(pRichEditOle);
-		TCHAR exeFullPath[MAX_PATH]; // MAX_PATH
-		GetModuleFileName(NULL,exeFullPath,MAX_PATH);//得到程序模块名称，全路径
-		CString fileAPath;
-		fileAPath.Format(_T("%s\\..\\%s"),exeFullPath,_T("a.bmp"));
-		CString fileGPath;
-		fileGPath.Format(_T("%s\\..\\%s"),exeFullPath,_T("c.gif"));
+		//CRichEditOleCallback *pRichEditOleLess = new CRichEditOleCallback;
+		m_richEditLess.SetOLECallback(&m_richEditLess);
 
-		Image* gif = Image::FromFile(fileGPath);
-		m_richEditLess.InsertGif((LONG)gif);
+		Image* gifLess = Image::FromFile(fileGPath);
+		m_richEditLess.InsertGif((LONG)gifLess);
 
 		m_richEditLess.OnTxInPlaceActivate(NULL);
 		m_richEditLess.AppendText(_T("windowless edit"),true);

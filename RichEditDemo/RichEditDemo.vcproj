@@ -247,6 +247,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dragdrop.h"
+				>
+			</File>
+			<File
 				RelativePath="..\DynamicOle\DynamicOle_i.h"
 				>
 			</File>

@@ -96,7 +96,7 @@ LRESULT CExRichEdit::OnLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 			CExRichEditData *pdata = (CExRichEditData*)reObj.dwUser;
 			if (pdata->m_dataType == GIF)
 			{
-				bHandled = TRUE;
+				//bHandled = TRUE;
 			}
 		}
 	}

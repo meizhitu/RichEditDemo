@@ -11,4 +11,5 @@ class CExRichEditData
 {
 public:
 	ExDataType m_dataType;
+	void* m_data;
 };

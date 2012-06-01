@@ -2,8 +2,9 @@
 #include <tom.h>
 #include "TxtWinHost.h"
 #include <richole.h>
+#include "RichEditOleCallback.h"
 
-class CExRichEditWindowless : public CTxtWinHost
+class CExRichEditWindowless : public CTxtWinHost,public CRichEditOleCallback
 {
 public:
 	CExRichEditWindowless();
@@ -11,6 +12,9 @@ public:
 public:
 	IRichEditOle* GetIRichEditOle();
 	BOOL SetOLECallback(IRichEditOleCallback* pCallback);
+
+	STDMETHOD(QueryAcceptData) (LPDATAOBJECT lpdataobj, CLIPFORMAT FAR * lpcfFormat, DWORD reco, BOOL fReally, HGLOBAL hMetaPict);
+	STDMETHOD(GetClipboardData) (CHARRANGE FAR * lpchrg, DWORD reco, LPDATAOBJECT FAR * lplpdataobj);
 
 public:
 	void InsertGif(LONG gif);
@@ -21,5 +25,6 @@ public:
 	int SetSel(long nStartChar, long nEndChar);
 
 	void ReplaceSel(LPCTSTR lpszNewText, bool bCanUndo);
+	CString GetTextRange(long nStartChar, long nEndChar);
 
 };

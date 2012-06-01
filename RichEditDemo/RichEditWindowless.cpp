@@ -2,6 +2,7 @@
 #include "RichEditWindowless.h"
 #include "..\DynamicOle\DynamicOle_i.h"
 #include "ExRichEditData.h"
+#include "dragdrop.h"
 
 CExRichEditWindowless::CExRichEditWindowless()
 {
@@ -23,6 +24,136 @@ BOOL CExRichEditWindowless::SetOLECallback(IRichEditOleCallback* pCallback)
 {
 	GetTextServices()->TxSendMessage(EM_SETOLECALLBACK, 0, (LPARAM)pCallback, 0);
 	return TRUE;
+}
+
+CString CExRichEditWindowless::GetTextRange(long nStartChar, long nEndChar)
+{
+	TEXTRANGEW tr = { 0 };
+	tr.chrg.cpMin = nStartChar;
+	tr.chrg.cpMax = nEndChar;
+	LPWSTR lpText = NULL;
+	lpText = new WCHAR[nEndChar - nStartChar + 1];
+	::ZeroMemory(lpText, (nEndChar - nStartChar + 1) * sizeof(WCHAR));
+	tr.lpstrText = lpText;
+	GetTextServices()->TxSendMessage(EM_GETTEXTRANGE, 0, (LPARAM)&tr, 0);
+	CString sText(lpText);
+	delete[] lpText;
+	return sText;
+}
+
+STDMETHODIMP CExRichEditWindowless::QueryAcceptData(LPDATAOBJECT lpdataobj, CLIPFORMAT FAR *lpcfFormat,DWORD reco, BOOL fReally, HGLOBAL hMetaPict)
+{
+	if ( NULL == lpdataobj )
+		return E_INVALIDARG;	
+
+	HRESULT hr;
+	FORMATETC formatEtc;
+	STGMEDIUM stgMedium;
+
+	UINT uFormat = m_uOwnOleClipboardFormat;
+	if (0 == uFormat)
+	{
+		return E_FAIL;
+	}
+	SecureZeroMemory(&formatEtc, sizeof(FORMATETC));
+	formatEtc.cfFormat = uFormat;
+	formatEtc.dwAspect = DVASPECT_CONTENT;
+	formatEtc.lindex = -1;
+	formatEtc.ptd = NULL;
+	formatEtc.tymed = TYMED_HGLOBAL;
+
+	hr = lpdataobj->GetData(&formatEtc, &stgMedium);
+	if (S_OK == hr)
+	{
+		LPTSTR pDest = LPTSTR(::GlobalLock(stgMedium.hGlobal));
+		if (pDest != NULL)
+		{
+			ReplaceSel(CString(pDest),true);
+			::GlobalUnlock(stgMedium.hGlobal);
+			::ReleaseStgMedium( &stgMedium );
+			return S_OK;
+		}
+		else
+		{
+			::ReleaseStgMedium( &stgMedium );
+			return E_FAIL;
+		}
+	}
+	return S_OK;  
+
+}
+
+STDMETHODIMP CExRichEditWindowless::GetClipboardData(CHARRANGE FAR *lpchrg, DWORD reco, LPDATAOBJECT FAR *lplpdataobj)
+{
+	switch(reco)
+	{
+	case RECO_COPY:
+		{
+			HRESULT hr = E_NOTIMPL;
+			FORMATETC formatEtc;
+			STGMEDIUM stgMedium;
+			CDataObject *pDataObject = new CDataObject(NULL);
+
+			CString text = GetTextRange(lpchrg->cpMin,lpchrg->cpMax);
+			CString embedding(WCH_EMBEDDING);
+			text.Replace(embedding,_T("<objtct/>"));
+			if(!text.IsEmpty())
+			{
+				UINT uFormat = m_uOwnOleClipboardFormat;
+				if (0 != uFormat)
+				{
+					HGLOBAL hMemBlock = ::GlobalAlloc(GMEM_MOVEABLE, (text.GetLength() + 1) * sizeof(TCHAR));
+					if (NULL != hMemBlock)
+					{
+						LPTSTR pDest = LPTSTR(::GlobalLock(hMemBlock));
+						_tcscpy(pDest, LPCTSTR(text));
+						::GlobalUnlock(hMemBlock);
+
+						SecureZeroMemory(&formatEtc, sizeof(FORMATETC));
+						formatEtc.cfFormat = uFormat;
+						formatEtc.dwAspect = DVASPECT_CONTENT;
+						formatEtc.lindex = -1;
+						formatEtc.ptd = NULL;
+						formatEtc.tymed = TYMED_HGLOBAL;
+
+						SecureZeroMemory(&stgMedium, sizeof(STGMEDIUM));
+						stgMedium.tymed = TYMED_HGLOBAL;
+						stgMedium.hGlobal = hMemBlock;
+						hr = pDataObject->SetData(&formatEtc, &stgMedium, TRUE);
+						if (FAILED(hr))
+						{
+							::GlobalFree(hMemBlock);
+							hr &= E_FAIL;
+						}
+					}
+					else
+					{
+						hr &= E_OUTOFMEMORY;
+					}
+				}
+				else
+				{
+					hr &= E_FAIL;
+				}
+			}
+			else
+			{
+				return E_UNEXPECTED;
+			}
+			if (SUCCEEDED(hr))
+			{
+				(*lplpdataobj) = pDataObject;
+				(*lplpdataobj)->AddRef();
+			}
+			return hr;
+		}
+	case RECO_CUT:
+	case RECO_DRAG:
+	case RECO_DROP:
+	case RECO_PASTE:
+	default:
+		return E_NOTIMPL;
+	}
 }
 
 int CExRichEditWindowless::InsertText(long nInsertAfterChar, LPCTSTR lpstrText, bool bCanUndo)
@@ -114,6 +245,7 @@ void CExRichEditWindowless::InsertGif(LONG gif)
 
 		CExRichEditData* pdata = new CExRichEditData;
 		pdata->m_dataType = GIF;
+		pdata->m_data = (void*)gif;
 		reobject.dwUser = (DWORD)pdata;//TODO 用户数据
 
 		lpOleObject->SetClientSite(lpClientSite); 
